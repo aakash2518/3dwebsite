@@ -130,7 +130,7 @@ function ServicesPage() {
               </p>
             </div>
             
-            <h1 key={`t-${activeServiceIndex}`} className="font-display text-[14vw] sm:text-[12vw] md:text-[8vw] leading-[0.95] md:leading-[0.9] tracking-tighter mb-6 md:mb-8 animate-in fade-in slide-in-from-bottom-12 duration-700">
+            <h1 key={`t-${activeServiceIndex}`} className="font-display text-[clamp(2.5rem,12vw,6rem)] md:text-[clamp(4rem,7vw,10rem)] leading-[0.95] md:leading-[0.9] tracking-tighter mb-6 md:mb-8 animate-in fade-in slide-in-from-bottom-12 duration-700">
               {activeService?.title.split(' ').map((word, i) => (
                 <span key={i} className={i === 1 ? "italic text-[var(--ember)]" : ""}>
                   {word}{' '}

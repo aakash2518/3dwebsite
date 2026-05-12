@@ -41,7 +41,7 @@ export function Nav() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.2em] text-[var(--bone)] font-mono">
+        <nav className="desktop-nav hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.2em] text-[var(--bone)] font-mono">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -62,11 +62,12 @@ export function Nav() {
 
         {/* Mobile Toggle */}
         <button 
-          className="md:hidden z-50 p-2 text-[var(--bone)] hover:text-[var(--gold)] transition-colors"
+          className="flex md:hidden z-[60] p-2 text-[var(--bone)] hover:text-[var(--gold)] transition-colors relative"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
+          type="button"
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 

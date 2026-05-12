@@ -11,7 +11,7 @@ export function Footer() {
           </p>
           <Link
             to="/contact"
-            className="font-display text-[14vw] sm:text-[11vw] md:text-[8vw] leading-[0.9] tracking-[-0.03em] block hover:text-[var(--gold)] transition-colors"
+            className="font-display text-[clamp(2.5rem,14vw,8rem)] md:text-[clamp(4rem,8vw,10rem)] leading-[0.9] tracking-[-0.03em] block hover:text-[var(--gold)] transition-colors"
           >
             let's <span className="italic text-[var(--gold)]">talk →</span>
           </Link>

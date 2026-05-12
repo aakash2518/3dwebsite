@@ -104,7 +104,7 @@ export function WhatWeOffer() {
             (What we offer)
           </p>
           
-          <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
+          <div className="relative h-[300px] sm:h-[350px] md:h-[400px] overflow-hidden">
             {offerings.map((offering, i) => (
               <div
                 key={i}
@@ -114,7 +114,7 @@ export function WhatWeOffer() {
                     : "opacity-0 translate-y-12"
                 }`}
               >
-                <h2 className="font-display text-5xl md:text-8xl tracking-tighter leading-none mb-4">
+                <h2 className="font-display text-4xl sm:text-6xl md:text-8xl tracking-tighter leading-none mb-4">
                   {offering.title}
                 </h2>
                 <p className="text-lg md:text-2xl text-bone/60 max-w-md leading-relaxed">

@@ -12,15 +12,19 @@ export function VideoIntro({ onComplete }: VideoIntroProps) {
   const [isFinished, setIsFinished] = useState(false);
   const hasTriggeredComplete = useRef(false);
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    
+    // Disable intro on mobile for better accessibility and speed
+    if (window.innerWidth < 768) {
+      onComplete();
+      setIsFinished(true);
+      return;
+    }
+
     // Fallback if video fails or is too long
     const timeout = setTimeout(() => {
       if (!hasTriggeredComplete.current) {
         handleTransition();
       }
-    }, 10000);
+    }, 5000);
 
     return () => {
       document.body.style.overflow = "auto";
