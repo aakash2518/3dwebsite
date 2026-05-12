@@ -1,6 +1,6 @@
 import { createRootRouteWithContext, Outlet, HeadContent, Scripts, useRouter, Link } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import appCss from "../styles.css?url";
+import "../styles.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Cursor } from "@/components/Cursor";
 import { Nav } from "@/components/Nav";
@@ -44,7 +44,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "royalfinity technology — Digital growth, simplified." },
       { name: "description", content: "Web, app, branding, AI and marketing — royalfinity technology builds what your business needs to grow." },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
   }),
   shellComponent: RootShell,
   component: RootComponent,

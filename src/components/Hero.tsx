@@ -56,11 +56,11 @@ export function Hero() {
           <span className="text-right max-w-[18ch] hidden sm:block">royalfinity technology — let's grow together</span>
         </div>
 
-        <h1 className="hero-title font-display font-light text-[var(--bone)] leading-[0.95] md:leading-[0.85] tracking-[-0.04em] text-[clamp(1.5rem,9vw,4rem)] md:text-[clamp(4rem,8vw,9rem)]">
+        <h1 className="hero-title hero-main-title">
           <div className="overflow-hidden">{split("Struggling")}</div>
-          <div className="md:pl-[8vw] italic overflow-hidden">{split("to grow")}</div>
+          <div className="hero-indent-1 hero-italic overflow-hidden">{split("to grow")}</div>
           <div className="overflow-hidden">{split("online?")}</div>
-          <div className="md:pl-[15vw] text-[var(--gold)] overflow-hidden">{split("We fix that.")}</div>
+          <div className="hero-indent-2 text-gold overflow-hidden">{split("We fix that.")}</div>
         </h1>
 
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-8 sm:gap-6">

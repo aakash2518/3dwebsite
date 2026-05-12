@@ -41,7 +41,7 @@ export function Nav() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="desktop-nav hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.2em] text-[var(--bone)] font-mono">
+        <nav className="nav-desktop items-center gap-8 text-xs uppercase tracking-[0.2em] text-[var(--bone)] font-mono">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -56,13 +56,13 @@ export function Nav() {
         </nav>
 
         {/* Contact Info (Desktop) */}
-        <a href="tel:+919211816999" className="text-xs uppercase tracking-[0.2em] text-[var(--bone)] font-mono hidden md:block">
+        <a href="tel:+919211816999" className="nav-desktop text-xs uppercase tracking-[0.2em] text-[var(--bone)] font-mono">
           (+91 92118 16999)
         </a>
 
         {/* Mobile Toggle */}
         <button 
-          className="flex md:hidden z-[60] p-2 text-[var(--bone)] hover:text-[var(--gold)] transition-colors relative"
+          className="nav-mobile-toggle z-[60] p-2 text-[var(--bone)] hover:text-[var(--gold)] transition-colors relative"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
           type="button"

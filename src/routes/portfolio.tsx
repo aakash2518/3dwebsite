@@ -45,13 +45,13 @@ function PortfolioPage() {
 
       <section className="px-6 md:px-10 space-y-32 md:space-y-48 pb-32">
         {projects.map((p, i) => (
-          <article key={p.n} className={`grid grid-cols-12 gap-6 items-center ${i % 2 ? "md:[direction:rtl]" : ""}`}>
-            <div className="col-span-12 md:col-span-8 [direction:ltr]">
+          <article key={p.n} className="portfolio-grid">
+            <div className="portfolio-img-col">
               <div className="overflow-hidden bg-card aspect-[16/10]" data-cursor>
                 <img src={p.img} alt={p.title} loading="lazy" className="project-img h-full w-full object-cover will-change-transform" />
               </div>
             </div>
-            <div className="col-span-12 md:col-span-4 [direction:ltr]">
+            <div className="portfolio-text-col">
               <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--bone)]/50">
                 {p.n} / {p.year}
               </div>

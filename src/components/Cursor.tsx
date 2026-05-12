@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 export function Cursor() {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -7,44 +8,49 @@ export function Cursor() {
   useEffect(() => {
     if (window.matchMedia("(max-width: 768px)").matches) return;
 
-    let mx = window.innerWidth / 2;
-    let my = window.innerHeight / 2;
-    let rx = mx, ry = my;
+    const setRingX = gsap.quickSetter(ringRef.current, "x", "px");
+    const setRingY = gsap.quickSetter(ringRef.current, "y", "px");
+    const setDotX = gsap.quickSetter(dotRef.current, "x", "px");
+    const setDotY = gsap.quickSetter(dotRef.current, "y", "px");
 
     const onMove = (e: MouseEvent) => {
-      mx = e.clientX; my = e.clientY;
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%, -50%)`;
-      }
+      const { clientX: x, clientY: y } = e;
+      
+      gsap.to({}, {
+        duration: 0,
+        onUpdate: () => {
+          setDotX(x);
+          setDotY(y);
+        }
+      });
+
+      gsap.to({}, {
+        duration: 0.6,
+        ease: "power3.out",
+        onUpdate: () => {
+          setRingX(x);
+          setRingY(y);
+        }
+      });
     };
 
     const onOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const interactive = target.closest("a, button, [data-cursor]");
-      if (ringRef.current) {
-        ringRef.current.classList.toggle("scale-[2.5]", !!interactive);
-        ringRef.current.classList.toggle("bg-[var(--ember)]/20", !!interactive);
-      }
+      gsap.to(ringRef.current, {
+        scale: interactive ? 2.5 : 1,
+        backgroundColor: interactive ? "rgba(235, 87, 87, 0.2)" : "transparent",
+        duration: 0.3
+      });
     };
-
-    let raf = 0;
-    const loop = () => {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
-      }
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
 
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseover", onOver);
     return () => {
-      cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseover", onOver);
     };
+
   }, []);
 
   return (

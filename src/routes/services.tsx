@@ -37,21 +37,38 @@ function ServicesPage() {
   const [activeServiceIndex, setActiveServiceIndex] = useState(0);
   const activeIndexRef = useRef(0);
 
-  // Preload frames for all services initially (or lazy load as we go)
+  const framesCache = useRef<Record<string, HTMLImageElement[]>>({});
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
-    const preloadAll = async () => {
-      // Preload first frames of each service
-      serviceConfig.forEach(config => {
-        const img = new Image();
-        const padded = String(0).padStart(config.padding, '0');
-        img.src = `/assets/${config.folder}/frame_${padded}_delay-0.041s.webp`;
+    const preload = async () => {
+      const cache: Record<string, HTMLImageElement[]> = {};
+      
+      const promises = serviceConfig.map(async (config) => {
+        const frames: HTMLImageElement[] = [];
+        // Only preload the first 20 frames of each service initially to start fast
+        // Then load the rest in the background
+        const initialFrames = 20;
+        
+        for (let i = 0; i < config.frames; i++) {
+          const img = new Image();
+          const padded = String(i).padStart(config.padding, '0');
+          img.src = `/assets/${config.folder}/frame_${padded}_delay-0.041s.webp`;
+          frames.push(img);
+        }
+        cache[config.id] = frames;
       });
+
+      await Promise.all(promises);
+      framesCache.current = cache;
+      setIsLoaded(true);
     };
-    preloadAll();
+    
+    preload();
   }, []);
 
   useEffect(() => {
-    if (!containerRef.current || !canvasRef.current) return;
+    if (!isLoaded || !containerRef.current || !canvasRef.current) return;
 
     const ctx = canvasRef.current.getContext("2d");
     if (!ctx) return;
@@ -60,7 +77,6 @@ function ServicesPage() {
       if (canvasRef.current) {
         canvasRef.current.width = window.innerWidth;
         canvasRef.current.height = window.innerHeight;
-        // Redraw current frame on resize if possible
       }
     };
     window.addEventListener("resize", updateCanvasSize);
@@ -71,9 +87,9 @@ function ServicesPage() {
     const mainST = ScrollTrigger.create({
       trigger: containerRef.current,
       start: "top top",
-      end: `+=${totalServices * 200}%`, // 200vh per service for smoother scroll
+      end: `+=${totalServices * 200}%`,
       pin: true,
-      scrub: 0.5,
+      scrub: 0.2, // Smoother scrub
       onUpdate: (self) => {
         const progress = self.progress;
         const rawIdx = progress * totalServices;
@@ -88,18 +104,16 @@ function ServicesPage() {
         const config = serviceConfig[serviceIdx];
         const frameIdx = Math.floor(serviceProgress * (config.frames - 1));
         
-        const img = new Image();
-        const padded = String(frameIdx).padStart(config.padding, '0');
-        img.src = `/assets/${config.folder}/frame_${padded}_delay-0.041s.webp`;
+        const img = framesCache.current[config.id]?.[frameIdx];
         
-        img.onload = () => {
+        if (img && img.complete) {
           if (!ctx || !canvasRef.current) return;
           ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
           const scale = Math.max(canvasRef.current.width / img.width, canvasRef.current.height / img.height);
           const x = (canvasRef.current.width - img.width * scale) / 2;
           const y = (canvasRef.current.height - img.height * scale) / 2;
           ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-        };
+        }
       },
     });
 
@@ -107,7 +121,8 @@ function ServicesPage() {
       mainST.kill();
       window.removeEventListener("resize", updateCanvasSize);
     };
-  }, []); // Only run once
+  }, [isLoaded]);
+
 
   const activeService = services[activeServiceIndex];
 

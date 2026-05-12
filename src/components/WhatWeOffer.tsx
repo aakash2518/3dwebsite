@@ -26,12 +26,17 @@ export function WhatWeOffer() {
 
     const frameCount = 135;
     const frames: HTMLImageElement[] = [];
+    let loadedCount = 0;
     
     // Preload frames
     for (let i = 0; i < frameCount; i++) {
       const img = new Image();
       const padded = String(i).padStart(3, "0");
       img.src = `/assets/whatweoffer/frame_${padded}_delay-0.041s.webp`;
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === 1) render(0); // Render first frame as soon as it's ready
+      };
       frames.push(img);
     }
 
@@ -43,15 +48,14 @@ export function WhatWeOffer() {
         const x = (canvas.width - img.width * scale) / 2;
         const y = (canvas.height - img.height * scale) / 2;
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-      } else if (img) {
-        img.onload = () => render(index);
       }
     };
 
     const updateSize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      render(Math.floor(ScrollTrigger.getById("offerST")?.progress || 0 * (frameCount - 1)));
+      const progress = ScrollTrigger.getById("offerST")?.progress || 0;
+      render(Math.floor(progress * (frameCount - 1)));
     };
 
     window.addEventListener("resize", updateSize);
@@ -63,7 +67,7 @@ export function WhatWeOffer() {
       start: "top top",
       end: "+=300%",
       pin: true,
-      scrub: 0.5,
+      scrub: 0.1, // Faster scrub for better responsiveness
       onUpdate: (self) => {
         const frameIndex = Math.min(
           frameCount - 1,
@@ -80,13 +84,11 @@ export function WhatWeOffer() {
       },
     });
 
-    // Initial render
-    frames[0].onload = () => render(0);
-
     return () => {
       st.kill();
       window.removeEventListener("resize", updateSize);
     };
+
   }, []);
 
   return (
