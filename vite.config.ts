@@ -6,7 +6,12 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 
 export default defineConfig({
   plugins: [
-    tanstackStart(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+        autoStaticPathsDiscovery: true,
+      },
+    }),
     react(),
     tailwindcss(),
     tsconfigPaths(),
